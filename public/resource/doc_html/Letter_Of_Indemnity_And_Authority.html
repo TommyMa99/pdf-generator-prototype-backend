@@ -1,0 +1,37 @@
+<p style="margin-top:0pt; margin-right:1.4pt; margin-bottom:0pt; text-align:center; widows:0; orphans:0; font-size:11pt;"><strong><span style="font-family:Arial;"><%= entityName %></span></strong></p>
+<p style="margin-top:0pt; margin-right:1.4pt; margin-bottom:0pt; text-align:center; widows:0; orphans:0; font-size:11pt;"><span style="font-family:Arial;">Company Registration No: <%= companyRegistrationNumber %></span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">(Incorporated in the Republic of Singapore)</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:center; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">(the &ldquo;Company&rdquo;)</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:center;"><span style="font-family:Arial;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:center;"><span style="font-family:Arial;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:center;"><strong><span style="font-family:Arial;">&nbsp;</span></strong></p>
+<h1 style="margin-top:0pt; margin-bottom:0pt; page-break-after:avoid; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.1pt;">MR <%= companySecretary %></span></h1>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;"><%= registerAddressCompany %></span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><strong><span style="font-family:Arial; letter-spacing:-0.15pt;">LETTER OF INDEMNITY AND AUTHORITY</span></strong></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">In consideration of you having agreed at our request to act as the Secretary of our Company, we hereby undertake to indemnify and keep you indemnified against all losses (including legal costs on a full indemnity basis) charges and damages incurred or suffered by you in consequences of any action, suits proceedings, claims, demands, costs and expenses of any nature whatsoever which may be taken or made against you or incurred or become payable by you in respect of acting in the above mentioned position.</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">We hereby authorise you to lodge your resignation as secretary with the Accounting and Corporate Regulatory Authority (on the pre-signed Statutory Form in your custody) in the event we cannot be contacted by whatever means.</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">A notice of intention to resign shall be sent by registered mail to us at our last known registered address.</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">The notice shall give 14 days for us to respond, failing which you will proceed to lodge your resignation as mentioned above.</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">We hereby undertake to keep you informed of any change of address.</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<p style="margin-top:0pt; margin-bottom:0pt; text-align:justify;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+<h2 style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; font-weight:normal; letter-spacing:-0.1pt;">DATED: <%= currentDate %>&nbsp;</span></h2>
+<div><% if (firstDirectorAndControllerName.length > 0) { %>
+        <% firstDirectorAndControllerName.forEach(person => {%>
+            <p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+            <p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+            <p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">&nbsp;</span></p>
+            <p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">................................................................................</span></p>
+            <p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial;"><%= person %></span></p>
+            <p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; font-size:11pt;"><span style="font-family:Arial; letter-spacing:-0.15pt;">Director</span></p>
+        <%  });%>
+    <% }%>
+</div>

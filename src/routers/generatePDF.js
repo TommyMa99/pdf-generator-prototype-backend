@@ -13,6 +13,40 @@ const upload = multer({
     dest: "./tmp/"
 })
 
+const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+const configObj = {
+  region: "ap-southeast-1",
+  signatureVersion: 'v4'
+}
+// https://s3.ap-southeast-1.amazonaws.com/stage.storage.meyzer.corpsec/template/Shareholders-Declaration-Form-01HCQW2W64HN39P2XXDR8EKFJE.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVLGMNK7MA4BMNO6P%2F20231016%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20231016T103925Z&X-Amz-Expires=86400&X-Amz-Signature=7d60e5e8d0144f0795fa3535d8da0d579cb9c36db1de536b6e899702e7558de5&X-Amz-SignedHeaders=host&x-id=GetObject
+const s3Client = new S3Client(configObj);
+
+const streamToString = (stream) =>
+  new Promise((resolve, reject) => {
+    const chunks = [];
+    stream.on("data", (chunk) => chunks.push(chunk));
+    stream.on("error", reject);
+    //stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+    stream.on("end", () => resolve(Buffer.concat(chunks)));
+  });
+
+const convertFile = async () => {
+  const command = new GetObjectCommand({ Bucket: 'stage.storage.meyzer.corpsec', Key: 'template/Form-for-Registrable-Controllers-01HCQFY8KDT24Z067MGP1WQ4J7.docx' });
+  console.log('command: ', command)
+  const { Body } = await s3Client.send(command);
+  console.log('bodyContent: ', Body)
+  const bodyContents = await streamToString(Body);
+  console.log('bodyContent: ', bodyContents)
+
+  const arrayBuffer = toArrayBuffer(bodyContents);
+// if (uploadedFile) {
+    // const arrayBuffer = await convertFileToArrayBuffer(url);
+    result = await convertDocToHtml(arrayBuffer)
+    console.log(result)
+
+    return result;
+};
+
 function asImageURL(arrayBuffer) {
     const url = URL.createObjectURL(arrayBuffer, { type: 'image/png' });
     return url;
@@ -36,6 +70,7 @@ function convertFileToArrayBuffer(filePath) {
     return new Promise((resolve, reject) => {
       fs.readFile(filePath, (err, data) => {
         if (err) {
+          console.log('XXXXXXXXXXXXXXXXXX ', err);
           reject(err);
         } else {
           const arrayBuffer = Uint8Array.from(data).buffer;
@@ -45,9 +80,10 @@ function convertFileToArrayBuffer(filePath) {
     });
 }
 router.post('/generatePDF', async (req, res) => {
+  console.log('generate pdf ', req.body.html);
     const html = req.body.html
     const options = {
-        format: 'A3',
+        format: 'A4',
         header: {
             height: '20mm'
         },
@@ -86,10 +122,42 @@ router.post('/convertHTML',upload.single("file"), async (req, res) => {
     if (uploadedFile) {
         const arrayBuffer = await convertFileToArrayBuffer(uploadedFile.path);
         result = await convertDocToHtml(arrayBuffer)
-        // console.log(result)
+        console.log(result)
         fs.unlinkSync(uploadedFile.path);
     }
     res.status(200).send(result.toString())
 })
+
+function toArrayBuffer(buffer) {
+  var ab = new ArrayBuffer(buffer.length);
+  var view = new Uint8Array(ab);
+  for (var i = 0; i < buffer.length; ++i) {
+      view[i] = buffer[i];
+  }
+  return ab;
+}
+
+router.post('/convertHTML2',upload.single("file"), async (req, res) => {
+  const uploadedFile = req.file;
+  console.log('body: ', req.body);
+  const url = req.body.buf.data;
+  console.log('url: ', url);
+  let result = null
+
+  const arrayBuffer = toArrayBuffer(url);
+  // if (uploadedFile) {
+      // const arrayBuffer = await convertFileToArrayBuffer(url);
+      result = await convertDocToHtml(arrayBuffer)
+      console.log(result)
+      // fs.unlinkSync(uploadedFile.path);
+  // }
+  res.status(200).send(result.toString())
+});
+
+router.post('/convert', async (req, res) => {
+  let a = await convertFile();
+
+  res.status(200).send(a);
+});
 
 module.exports = router

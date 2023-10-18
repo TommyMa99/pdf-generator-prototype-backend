@@ -138,9 +138,9 @@ function toArrayBuffer(buffer) {
 }
 
 router.post('/convertHTML2',upload.single("file"), async (req, res) => {
-  const uploadedFile = req.file;
+  // const uploadedFile = req.file;
   console.log('body: ', req.body);
-  const url = req.body.buf.data;
+  const url = req.body.buffer.data;
   console.log('url: ', url);
   let result = null
 
@@ -151,7 +151,9 @@ router.post('/convertHTML2',upload.single("file"), async (req, res) => {
       console.log(result)
       // fs.unlinkSync(uploadedFile.path);
   // }
-  res.status(200).send(result.toString())
+  res.status(200).send({
+    data: result.toString(),
+  })
 });
 
 router.post('/convert', async (req, res) => {

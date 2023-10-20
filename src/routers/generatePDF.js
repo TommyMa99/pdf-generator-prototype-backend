@@ -31,23 +31,6 @@ const streamToString = (stream) =>
     stream.on("end", () => resolve(Buffer.concat(chunks)));
   });
 
-const convertFile = async () => {
-  const command = new GetObjectCommand({ Bucket: 'stage.storage.meyzer.corpsec', Key: 'template/Form-for-Registrable-Controllers-01HCQFY8KDT24Z067MGP1WQ4J7.docx' });
-  console.log('command: ', command)
-  const { Body } = await s3Client.send(command);
-  console.log('bodyContent: ', Body)
-  const bodyContents = await streamToString(Body);
-  console.log('bodyContent: ', bodyContents)
-
-  const arrayBuffer = toArrayBuffer(bodyContents);
-// if (uploadedFile) {
-    // const arrayBuffer = await convertFileToArrayBuffer(url);
-    result = await convertDocToHtml(arrayBuffer)
-    console.log(result)
-
-    return result;
-};
-
 function asImageURL(arrayBuffer) {
     const url = URL.createObjectURL(arrayBuffer, { type: 'image/png' });
     return url;

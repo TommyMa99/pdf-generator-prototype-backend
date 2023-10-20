@@ -9,6 +9,7 @@ const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.js");
 const multer = require('multer');
 const docx2html = require('docx2html');
 const { jsPDF } = require("jspdf");
+const mammoth = require('mammoth');
 const upload = multer({
     dest: "./tmp/"
 })
@@ -143,6 +144,15 @@ router.post('/convertHTML2',upload.single("file"), async (req, res) => {
   const url = req.body.buffer.data;
   console.log('url: ', url);
   let result = null
+
+  // mammoth.convertToHtml({ buffer: url })
+  //   .then(resp => {
+  //     console.log('resp ', resp);
+  //     return resp.value;
+  //   })
+  //   .then(r => res.status(200).send({
+  //     data: r.toString(),
+  //   }))
 
   const arrayBuffer = toArrayBuffer(url);
   // if (uploadedFile) {

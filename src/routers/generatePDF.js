@@ -84,7 +84,7 @@ router.post('/generatePDF', async (req, res) => {
   console.log('generate pdf ', req.body.html);
     const html = req.body.html
     const options = {
-        format: 'A4',
+        format: 'A3',
         header: {
             height: '20mm'
         },

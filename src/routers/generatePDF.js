@@ -166,10 +166,8 @@ router.post('/convertHTML2',upload.single("file"), async (req, res) => {
   })
 });
 
-router.post('/convert', async (req, res) => {
-  let a = await convertFile();
-
-  res.status(200).send(a);
+router.get('/', async (req, res) => {
+  res.send('OK');
 });
 
 module.exports = router

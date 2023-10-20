@@ -121,7 +121,7 @@ function toArrayBuffer(buffer) {
   return ab;
 }
 
-router.post('/convertHTML2',upload.single("file"), async (req, res) => {
+router.post('/pdf/convert2Html',upload.single("file"), async (req, res) => {
   // const uploadedFile = req.file;
   console.log('body: ', req.body);
   const url = req.body.buffer.data;

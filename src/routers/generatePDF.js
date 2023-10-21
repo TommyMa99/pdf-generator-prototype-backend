@@ -75,21 +75,22 @@ router.post('/generatePDF', async (req, res) => {
             height: '20mm',
         },
     };
-    pdf.create(html, options).toFile('report.pdf', function (err, data) {
+
+    let filePath = path.join(__dirname, '..', '..', 'public', 'report.pdf');
+    pdf.create(html, options).toFile(filePath, function (err, data) {
         if (err) {
             console.error(err);
         } else {
             console.log('PDF created successfully');
         }
-        const pdfPath = path.join(__dirname, '..', '..', 'report.pdf');
-        console.log(pdfPath);
-        res.download(pdfPath, (err) => {
+
+        res.download(filePath, (err) => {
             if (err) {
                 console.error('Error downloading PDF:', err);
             } else {
                 console.log('PDF download successful');
             }
-            fs.unlink(pdfPath, (unlinkErr) => {
+            fs.unlink(filePath, (unlinkErr) => {
                 if (unlinkErr) {
                   console.error('Error deleting PDF:', unlinkErr);
                 } else {

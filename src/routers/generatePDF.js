@@ -64,7 +64,7 @@ function convertFileToArrayBuffer(filePath) {
     });
 }
 router.post('/generatePDF', async (req, res) => {
-  console.log('generate pdf ', req.body.html);
+  // console.log('generate pdf ', req.body.html);
     const html = req.body.html
     const options = {
         format: 'A3',
@@ -81,9 +81,9 @@ router.post('/generatePDF', async (req, res) => {
         } else {
             console.log('PDF created successfully');
         }
-        const pdfPath = path.join(__dirname, '../../report.pdf');
+        const pdfPath = path.join(__dirname, '..', '..', 'report.pdf');
         console.log(pdfPath);
-        res.download(pdfPath, 'report.pdf', (err) => {
+        res.download(pdfPath, (err) => {
             if (err) {
                 console.error('Error downloading PDF:', err);
             } else {

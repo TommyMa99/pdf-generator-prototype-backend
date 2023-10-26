@@ -10,17 +10,18 @@ const multer = require('multer');
 const docx2html = require('docx2html');
 const { jsPDF } = require("jspdf");
 const mammoth = require('mammoth');
+const puppeteer = require("puppeteer");
+let filePath = path.join(__dirname, '..', '..', 'public', 'report.pdf');
+const options = {
+  path: filePath,
+  format: "A4",
+  printBackground: true,
+  margin: { top: "1.52cm", right: "2.54cm", bottom: "0.5cm", left: "2.54cm" },
+};
+
 const upload = multer({
     dest: "./tmp/"
 })
-
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
-const configObj = {
-  region: "ap-southeast-1",
-  signatureVersion: 'v4'
-}
-// https://s3.ap-southeast-1.amazonaws.com/stage.storage.meyzer.corpsec/template/Shareholders-Declaration-Form-01HCQW2W64HN39P2XXDR8EKFJE.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVLGMNK7MA4BMNO6P%2F20231016%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20231016T103925Z&X-Amz-Expires=86400&X-Amz-Signature=7d60e5e8d0144f0795fa3535d8da0d579cb9c36db1de536b6e899702e7558de5&X-Amz-SignedHeaders=host&x-id=GetObject
-const s3Client = new S3Client(configObj);
 
 const streamToString = (stream) =>
   new Promise((resolve, reject) => {
@@ -63,6 +64,37 @@ function convertFileToArrayBuffer(filePath) {
       });
     });
 }
+
+router.post('/generate/pdf', async (req, res) => {
+  const html = req.body.html;
+
+  // Create a browser instance
+  const browser = await puppeteer.launch();
+  
+  // Create a new page
+  const page = await browser.newPage();
+
+  await page.setContent(html);
+  let pdf = await page.pdf(options);
+
+  await browser.close();
+
+  res.download(filePath, (err) => {
+    if (err) {
+        console.error('Error downloading PDF:', err);
+    } else {
+        console.log('PDF download successful');
+    }
+    fs.unlink(filePath, (unlinkErr) => {
+        if (unlinkErr) {
+          console.error('Error deleting PDF:', unlinkErr);
+        } else {
+          console.log('PDF deleted successfully');
+        }
+    });
+  });
+});
+
 router.post('/generatePDF', async (req, res) => {
   // console.log('generate pdf ', req.body.html);
     const html = req.body.html

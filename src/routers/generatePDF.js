@@ -67,14 +67,18 @@ function convertFileToArrayBuffer(filePath) {
 
 router.post('/generate/pdf', async (req, res) => {
   const html = req.body.html;
-
+  console.log(html)
+  const regex = /background-color:[^;]+;/g;
+  const regexTextColor = /color:[^;]+;/g;
+  let modifiedHTML = html.replace(regex, '');
+  modifiedHTML = modifiedHTML.replace(regexTextColor, '');
   // Create a browser instance
   const browser = await puppeteer.launch();
   
   // Create a new page
   const page = await browser.newPage();
 
-  await page.setContent(html);
+  await page.setContent(modifiedHTML);
   let pdf = await page.pdf(options);
 
   await browser.close();

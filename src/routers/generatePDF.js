@@ -11,7 +11,11 @@ const docx2html = require('docx2html');
 const { jsPDF } = require("jspdf");
 const mammoth = require('mammoth');
 const puppeteer = require("puppeteer");
+const axios = require('axios');
 let filePath = path.join(__dirname, '..', '..', 'public', 'report.pdf');
+var Api2Pdf = require('api2pdf');   
+var a2pClient = new Api2Pdf('b5c0ebf2-ece5-44cc-a50c-7ecd6b1573fd');
+
 const options = {
   path: filePath,
   format: "A4",
@@ -97,6 +101,91 @@ router.post('/generate/pdf', async (req, res) => {
         }
     });
   });
+});
+
+router.post('/generate/pdf/api2pdf', async (req, res) => {
+  const html = req.body.html;
+  a2pClient.wkHtmlToPdf(html).then(async function(result) {
+    try {
+      const externalUrl = result.FileUrl;
+      const response = await axios.get(externalUrl, { responseType: 'stream' });
+      const filename = 'document.pdf';
+      let filePath = path.join(__dirname, '..', '..', 'public', 'report.pdf');
+      const writeStream = fs.createWriteStream(filePath);
+      response.data.pipe(writeStream);
+      writeStream.on('finish', () => {
+        res.download(filePath, filename, (err) => {
+          fs.unlinkSync(filePath);
+          if (err) {
+            console.error('Download error:', err);
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Download failed:', error.message);
+      res.status(500).send('Download failed');
+    }
+  });
+});
+
+router.post('/generate/pdf/api2pdf/v2', async (req, res) => {
+  var options = { 
+    marginBottom: 0.75,
+    marginLeft: 0.75,
+    marginRight: 0.75,
+    marginTop: 0.75
+  };
+  const html = req.body.html;
+  console.log(html)
+  const regex = /background:[^;]+;/g;
+  const regexTextColor = /color:[^;]+;/g;
+  let modifiedHTML = html.replace(regex, '');
+  modifiedHTML = modifiedHTML.replace(regexTextColor, '');
+  a2pClient.chromeHtmlToPdf(modifiedHTML, { options: options }).then(async function(result) {
+    try {
+      const externalUrl = result.FileUrl;
+      const response = await axios.get(externalUrl, { responseType: 'stream' });
+      const filename = 'document.pdf';
+      let filePath = path.join(__dirname, '..', '..', 'public', 'report.pdf');
+      const writeStream = fs.createWriteStream(filePath);
+      response.data.pipe(writeStream);
+      writeStream.on('finish', () => {
+        res.download(filePath, filename, (err) => {
+          fs.unlinkSync(filePath);
+          if (err) {
+            console.error('Download error:', err);
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Download failed:', error.message);
+      res.status(500).send('Download failed');
+    }
+  }).catch(function(err) {
+    console.log(err);
+  });
+  // a2pClient.chromeUrlToPdf(html).then(async function(result) {
+  //   console.log(result);
+  //   try {
+  //     const externalUrl = result.FileUrl;
+  //     const response = await axios.get(externalUrl, { responseType: 'stream' });
+  //     const filename = 'document.pdf';
+  //     let filePath = path.join(__dirname, '..', '..', 'public', 'report.pdf');
+  //     const writeStream = fs.createWriteStream(filePath);
+  //     response.data.pipe(writeStream);
+  //     writeStream.on('finish', () => {
+  //       res.download(filePath, filename, (err) => {
+  //         fs.unlinkSync(filePath);
+  //         if (err) {
+  //           console.error('Download error:', err);
+  //         }
+  //       });
+  //     });
+  //   } catch (error) {
+  //     console.error('Download failed:', error.message);
+  //     res.status(500).send('Download failed');
+  //   }
+  // });
 });
 
 router.post('/generatePDF', async (req, res) => {
